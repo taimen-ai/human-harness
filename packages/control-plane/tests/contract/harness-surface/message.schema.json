@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taimen.ai/contracts/harness-surface/1/message.schema.json",
+  "title": "SurfaceMessageRequest",
+  "description": "Тело POST …/surface/message: сообщение человека в его беседу с поверхности.",
+  "type": "object",
+  "required": ["requestId", "text"],
+  "additionalProperties": false,
+  "properties": {
+    "requestId": {
+      "description": "Ключ идемпотентности, генерирует клиент.",
+      "type": "string",
+      "format": "uuid"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20000
+    },
+    "screenContext": {
+      "oneOf": [
+        { "$ref": "screen-context.schema.json" },
+        { "type": "null" }
+      ]
+    }
+  }
+}

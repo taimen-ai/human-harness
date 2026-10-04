@@ -1,0 +1,13 @@
+Taimen Human Harness
+Copyright 2026 Aleksandr Pereboev and Taimen contributors
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+Third-party components and their licences are listed in THIRD_PARTY.md.
+
+This product is built on top of DeepSeek Harness (https://github.com/deepseek-ai/deepseek-harness),
+licensed under the MIT License; the upstream packages are consumed as npm dependencies
+and are not modified or vendored here.
+
+The Claude Agent SDK (@anthropic-ai/claude-agent-sdk), used by the claude-code model
+provider, is proprietary software of Anthropic PBC and is not covered by the Apache
+License 2.0; see THIRD_PARTY.md.

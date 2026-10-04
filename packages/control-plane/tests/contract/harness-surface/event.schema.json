@@ -1,0 +1,303 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taimen.ai/contracts/harness-surface/1/event.schema.json",
+  "title": "SurfaceStreamEvent",
+  "description": "data события потока GET …/surface/stream. Тип события — поле type, оно же в строке event: SSE. Клиент игнорирует незнакомые типы.",
+  "type": "object",
+  "required": [
+    "type",
+    "cursor",
+    "at"
+  ],
+  "properties": {
+    "type": {
+      "enum": [
+        "sleeping",
+        "waking",
+        "ready",
+        "message",
+        "delta",
+        "turn.started",
+        "tool.summary",
+        "approval.requested",
+        "approval.resolved",
+        "turn.ended"
+      ]
+    },
+    "cursor": {
+      "description": "Непрозрачный курсор для возобновления (id: SSE).",
+      "type": "string"
+    },
+    "at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "message"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "message": {
+            "$ref": "#/$defs/message"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "delta"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "messageId": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "messageId",
+          "text"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "enum": [
+              "turn.started",
+              "turn.ended"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "turnId": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "error": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "turnId"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "tool.summary"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "turnId": {
+            "type": "string"
+          },
+          "tool": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "title": {
+            "description": "Человекочитаемая строка, без аргументов и результатов вызова.",
+            "type": "string",
+            "maxLength": 300
+          },
+          "status": {
+            "enum": [
+              "started",
+              "succeeded",
+              "failed"
+            ]
+          }
+        },
+        "required": [
+          "turnId",
+          "tool",
+          "title",
+          "status"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "approval.requested"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "approvalRequestId": {
+            "type": "string"
+          },
+          "turnId": {
+            "type": "string"
+          },
+          "toolName": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "approvalRequestId",
+          "toolName",
+          "reason",
+          "expiresAt"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "approval.resolved"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "approvalRequestId": {
+            "type": "string"
+          },
+          "decision": {
+            "enum": [
+              "allow",
+              "reject",
+              "cancelled"
+            ]
+          },
+          "surface": {
+            "$ref": "#/$defs/surface"
+          }
+        },
+        "required": [
+          "approvalRequestId",
+          "decision"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "ready"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "resumed": {
+            "description": "true — отданы события после курсора; false — курсор неизвестен, клиент перечитывает history.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "resumed"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "surface": {
+      "enum": [
+        "window",
+        "telegram",
+        "console"
+      ]
+    },
+    "message": {
+      "type": "object",
+      "required": [
+        "id",
+        "role",
+        "text",
+        "at"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "user",
+            "assistant"
+          ]
+        },
+        "surface": {
+          "description": "Для сообщений человека — откуда написано. У сообщений ассистента нет: ответ виден на всех поверхностях.",
+          "$ref": "#/$defs/surface"
+        },
+        "text": {
+          "type": "string"
+        },
+        "at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "requestId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "screenContext": {
+          "description": "Только kind, id, label и url — без projection: история не хранит проекцию экрана.",
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

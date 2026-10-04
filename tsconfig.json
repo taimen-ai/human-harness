@@ -1,0 +1,23 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "packages/identity"
+    },
+    {
+      "path": "packages/control-plane"
+    },
+    {
+      "path": "packages/llm-claude-code"
+    },
+    {
+      "path": "packages/ui-human-harness"
+    },
+    {
+      "path": "packages/bundle"
+    },
+    {
+      "path": "packages/launcher"
+    }
+  ]
+}

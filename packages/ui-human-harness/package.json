@@ -1,0 +1,50 @@
+{
+  "name": "@human-harness/dsh-client-ui-human-harness",
+  "version": "0.1.0",
+  "description": "Браузерная половина Human Harness: панели Focus / Work / Updates в main-слоте Web Client DSH и пункты навигации в sidebar",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-theme",
+        "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "lib/client.js.map",
+    "lib/types/**/*.d.ts",
+    "assets/fonts/*.ttf",
+    "assets/fonts/OFL.txt"
+  ],
+  "scripts": {
+    "bundle": "tsdown"
+  },
+  "license": "Apache-2.0",
+  "private": true,
+  "devDependencies": {
+    "@human-harness/dsh-control-plane": "workspace:^"
+  },
+  "dependencies": {
+    "docx-preview": "0.4.1",
+    "read-excel-file": "9.3.10"
+  }
+}

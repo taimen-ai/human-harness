@@ -1,0 +1,77 @@
+{
+  "$schema": "./attention-rules.schema.json",
+  "version": 1,
+  "rules": [
+    {
+      "key": "approval.requested.mine",
+      "version": 1,
+      "description": "Решение ждут от человека или его роли — в том числе ворота и приёмка поручений.",
+      "on": ["approval.requested"],
+      "concerns": "approval-mine",
+      "significance": "now",
+      "message": "Ждёт твоего решения: {{payload.taskPublicId}} «{{payload.taskTitle}}». {{payload.comment}}",
+      "action": "Покажи суть и evidence (cp_run_progress, cp_get_task) и предложи решение: принять или вернуть с замечанием."
+    },
+    {
+      "key": "delegation.run-succeeded",
+      "version": 1,
+      "description": "Исполнитель поручения закончил прогон.",
+      "on": ["run.succeeded"],
+      "concerns": "task-creator",
+      "significance": "now",
+      "message": "Исполнитель закончил работу по {{task.publicId}} «{{task.title}}».",
+      "action": "Посмотри результат (cp_run_progress) и предложи приёмку или следующий шаг."
+    },
+    {
+      "key": "delegation.run-failed",
+      "version": 1,
+      "description": "Прогон поручения упал.",
+      "on": ["run.failed"],
+      "concerns": "task-creator",
+      "significance": "now",
+      "message": "Прогон по {{task.publicId}} «{{task.title}}» не удался: {{payload.reason}}",
+      "action": "Разбери причину (cp_run_progress) и предложи: повторить, уточнить задание или взять самому."
+    },
+    {
+      "key": "task.verification-failed.mine",
+      "version": 1,
+      "description": "Проверка не прошла на задаче, где человек исполнитель или автор.",
+      "on": ["task.verification_failed"],
+      "concerns": "task-involves",
+      "significance": "now",
+      "message": "Проверка {{task.publicId}} «{{task.title}}» не прошла: {{payload.reason}}",
+      "action": "Покажи упавший критерий и предложи, что исправить."
+    },
+    {
+      "key": "task.verified.delegated",
+      "version": 1,
+      "description": "Поручение прошло проверку и завершено.",
+      "on": ["task.verified"],
+      "concerns": "task-creator",
+      "significance": "digest",
+      "message": "{{task.publicId}} «{{task.title}}» прошла проверку и завершена.",
+      "action": "Упомяни в сводке; действий не требуется."
+    },
+    {
+      "key": "task.assigned-to-me",
+      "version": 1,
+      "description": "Человеку назначили задачу.",
+      "on": ["task.updated"],
+      "concerns": "any",
+      "when": {"payload.changes.assignee_id": "$me"},
+      "significance": "now",
+      "message": "Тебе назначили {{task.publicId}} «{{task.title}}».",
+      "action": "Коротко объясни, что нужно, и предложи взять в работу (cp_take_task) или делегировать."
+    },
+    {
+      "key": "task.comment.mine",
+      "version": 1,
+      "description": "Комментарий к задаче, где человек участвует.",
+      "on": ["task.comment_added"],
+      "concerns": "task-involves",
+      "significance": "digest",
+      "message": "Новый комментарий к {{task.publicId}} «{{task.title}}».",
+      "action": "Упомяни в сводке; если комментарий требует ответа — предложи ответить."
+    }
+  ]
+}

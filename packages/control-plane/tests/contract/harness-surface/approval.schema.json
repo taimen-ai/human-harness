@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taimen.ai/contracts/harness-surface/1/approval.schema.json",
+  "title": "SurfaceApprovalDecision",
+  "description": "Тело POST …/surface/approval: решение человека по запросу подтверждения ассистента. Побеждает первый ответ среди поверхностей.",
+  "type": "object",
+  "required": ["approvalRequestId", "decision"],
+  "additionalProperties": false,
+  "properties": {
+    "approvalRequestId": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "decision": {
+      "enum": ["allow", "reject"]
+    },
+    "comment": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  }
+}

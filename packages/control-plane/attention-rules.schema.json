@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "attention-rules.schema.json",
+  "title": "Правила значимости событий для проактивного ассистента",
+  "type": "object",
+  "required": ["version", "rules"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {"type": "string"},
+    "version": {"const": 1},
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["key", "version", "on", "concerns", "significance", "message", "action"],
+        "additionalProperties": false,
+        "properties": {
+          "key": {"type": "string", "pattern": "^[a-z][a-z0-9-]*(\\.[a-z0-9-]+)*$"},
+          "version": {"type": "integer", "minimum": 1},
+          "description": {"type": "string"},
+          "on": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$"}},
+          "concerns": {"enum": ["any", "approval-mine", "task-assignee", "task-creator", "task-involves"]},
+          "when": {"type": "object", "description": "Путь через точку → значение или список значений; \"$me\" — principal человека."},
+          "skipOwnActions": {"type": "boolean", "default": true},
+          "significance": {"enum": ["now", "digest"]},
+          "message": {"type": "string", "minLength": 1, "description": "Шаблон с {{путь}}: поля события, payload.*, task.publicId, task.title."},
+          "action": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

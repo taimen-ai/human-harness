@@ -1,0 +1,12 @@
+#!/bin/sh
+# pre-push харнесса: человек с ассистентом публикует только ветки task/* — в ствол и
+# в ветки фич изменения попадают через ревью (code-review-merge), как у раннеров.
+# Подключение (образ, H011): git config --global core.hooksPath /opt/harness/git/hooks
+set -eu
+while read -r local_ref local_sha remote_ref remote_sha; do
+  case "$remote_ref" in
+    refs/heads/task/*) ;;
+    *) echo "harness: push в $remote_ref запрещён — публикуются только ветки task/*; в ствол — через ревью" >&2; exit 1 ;;
+  esac
+done
+exit 0

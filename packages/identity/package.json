@@ -1,0 +1,21 @@
+{
+  "name": "@human-harness/dsh-identity",
+  "version": "0.1.0",
+  "description": "Identity плагин Human Harness: Platform Access Token IAM → access token нужного audience, кэш и обновление (ctx.harnessIdentity)",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["lib/index.js", "lib/types/**/*.d.ts"],
+  "scripts": {
+    "bundle": "tsdown"
+  },
+  "license": "Apache-2.0",
+  "private": true
+}

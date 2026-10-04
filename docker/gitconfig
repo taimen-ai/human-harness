@@ -1,0 +1,10 @@
+# Глобальный git харнесса (GIT_CONFIG_GLOBAL): токен forge — только для github.com и
+# только файлом; публикуются только ветки task/* (hook pre-push).
+[credential "https://github.com"]
+	helper = /opt/harness/packages/bundle/git/credential-helper.sh
+[core]
+	hooksPath = /opt/harness/packages/bundle/git
+[init]
+	defaultBranch = main
+[safe]
+	directory = *

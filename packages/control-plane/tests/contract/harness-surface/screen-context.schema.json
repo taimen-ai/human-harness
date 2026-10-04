@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taimen.ai/contracts/harness-surface/1/screen-context.schema.json",
+  "title": "ScreenContext",
+  "description": "Что на экране консоли у человека, когда он пишет ассистенту. Собирает серверная часть консоли; не больше 8 КБ в сериализованном виде, без секретов.",
+  "type": "object",
+  "required": ["kind", "url"],
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "description": "Вид экрана или объекта на нём.",
+      "enum": ["pulse", "work", "run", "process_instance", "rule", "agent", "principal", "package", "approval", "artifact", "knowledge", "org", "journal", "other"]
+    },
+    "id": {
+      "description": "Идентификатор объекта: publicId работы, id экземпляра, прогона, ключ агента и т. п. Нет у обзорных экранов.",
+      "type": "string",
+      "maxLength": 200
+    },
+    "label": {
+      "description": "Короткая подпись объекта для человека.",
+      "type": "string",
+      "maxLength": 200
+    },
+    "url": {
+      "description": "Относительный адрес экрана консоли, по нему ассистент даёт ссылку.",
+      "type": "string",
+      "pattern": "^/",
+      "maxLength": 500
+    },
+    "workspaceId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "projection": {
+      "description": "То, что экран уже показывает, в сжатом виде: цепочка происхождения, шаг и решения процесса, итог прогона. Форма зависит от kind; поля — идентификаторы, статусы, подписи и время.",
+      "type": "object"
+    },
+    "capturedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

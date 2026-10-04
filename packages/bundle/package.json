@@ -1,0 +1,27 @@
+{
+  "name": "@human-harness/dsh-human-harness",
+  "version": "0.1.0",
+  "description": "Bundle Human Harness для DeepSeek Harness: слой конфигурации поверх dsh-base + dsh-web-app — identity IAM, Control Plane, панели HWS и persona ассистента",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": ["lib/index.js", "lib/types/**/*.d.ts", "cordis.patch.yml"],
+  "scripts": {
+    "bundle": "tsdown"
+  },
+  "license": "Apache-2.0",
+  "private": true
+}

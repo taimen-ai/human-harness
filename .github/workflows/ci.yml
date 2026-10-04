@@ -1,0 +1,36 @@
+name: CI
+
+# The same make targets as the executor's checks (.agents/runner.yaml).
+# No sibling repositories and no secrets: dependencies are public npm packages,
+# and the core's contract is the OpenAPI snapshot committed under
+# packages/control-plane. The container image is not built here: it would
+# contain the proprietary Claude Agent SDK (see THIRD_PARTY.md).
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: corepack enable
+      - run: make install
+      - run: make typecheck
+      # tsdown bundles, so the browser-bundle test does not skip
+      - run: make build
+      # vitest: unit, contract and the white-label guard
+      - run: make test

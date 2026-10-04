@@ -1,0 +1,8 @@
+# Машиночитаемые соглашения репозитория для исполнителя; проза — AGENTS.md.
+# Формат — runner_config.md в control-plane (src/control_plane_agent/).
+# Соседей нет: зависимости — пакеты npm, контракт ядра — снимок OpenAPI в репозитории.
+version: 1
+setup: make install
+checks:
+  - {name: types, run: make typecheck}
+  - {name: tests, run: make test}

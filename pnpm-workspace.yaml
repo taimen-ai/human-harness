@@ -1,0 +1,11 @@
+packages:
+  - packages/*
+# postinstall-скрипты, которым разрешено выполняться (pnpm 11 требует явного списка):
+# esbuild — tsx/tsdown/vitest; остальные — нативные зависимости самого dsh (dev-запуск).
+allowBuilds:
+  esbuild: true
+  "@deepseek-ai/dsh-subprocess-local": true
+  "@google/genai": true
+  koffi: true
+  node-pty: true
+  protobufjs: true

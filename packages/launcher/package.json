@@ -1,0 +1,14 @@
+{
+  "name": "@human-harness/launcher",
+  "version": "0.1.0",
+  "description": "Launcher персональных харнессов: вход человека (OIDC + federation IAM), прокси HTTP/WS в его контейнер, жизненный цикл контейнеров через docker-socket-proxy, удаление бесед отключённых principal, вход каналов",
+  "type": "module",
+  "main": "lib/main.js",
+  "bin": { "harness-launcher": "lib/main.js" },
+  "files": ["lib/main.js"],
+  "scripts": {
+    "bundle": "tsdown"
+  },
+  "license": "Apache-2.0",
+  "private": true
+}
